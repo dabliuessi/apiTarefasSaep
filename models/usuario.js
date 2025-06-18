@@ -17,4 +17,6 @@ const Usuario = sequelize.define('Usuario', {
   timestamps: false
 });
 
+Usuario.hasMany(Tarefa, { foreignKey: 'id_usuario', as: 'tarefas' })
+
 module.exports = Usuario;
