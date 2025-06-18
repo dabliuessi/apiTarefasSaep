@@ -1,5 +1,6 @@
 const express = require('express');
 const Tarefa = require('../models/tarefa');
+const Usuario = require('../models/usuario');
 const router = express.Router();
 
 // Criar nova tarefa
@@ -25,7 +26,13 @@ router.get('/', async (req, res) => {
     const validFields = ['prioridade', 'status', 'data_cadastro'];
     const order = validFields.includes(ordenarPor) ? [[ordenarPor, 'ASC']] : [];
 
-    const tarefas = await Tarefa.findAll({ order });
+    const tarefas = await Tarefa.findAll({ order,
+      include: [{
+        model: Usuario,
+        as: 'usuario',
+        attributes: ['id', 'nome', 'email'] 
+      }]
+    });
     res.json(tarefas);
   } catch (error) {
     res.status(500).json({ error: error.message });
